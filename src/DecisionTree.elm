@@ -8,6 +8,7 @@ type Choice
     | HasCardBoardBox Bool
     | HasCards Bool
     | EveryonePlays Bool
+    | PayAttention Bool
     -- ...
 
 type Question
@@ -18,6 +19,7 @@ type Question
     | HasCardBoardBoxQ
     | HasCardsQ
     | EveryonePlaysQ
+    | PayAttentionQ
 
 
 getQuestion : Choice -> Question
@@ -44,6 +46,9 @@ getQuestion choice =
         EveryonePlays _ ->
             EveryonePlaysQ
 
+        PayAttention _ ->
+            PayAttentionQ
+
 
 -- does the game satisfy the user's choices?
 satisfies : Choice -> Choice -> Bool
@@ -68,6 +73,9 @@ satisfies userChoice gameAttribute =
             u == g
 
         (EveryonePlays u, EveryonePlays g) ->
+            u == g
+
+        (PayAttention u, PayAttention g) ->
             u == g
 
         (_, _) ->

@@ -65,25 +65,25 @@ allGames =
         , attributes = [ HasPongTable True, HasPongBalls True, CupCount 20, EveryonePlays True ]
         }
     ,   { name = "Pizza Box"
-        , attributes = [ HasPongTable False, HasCoin True, HasCardBoardBox True ]
+        , attributes = [ HasPongTable False, HasCoin True, HasCardBoardBox True, HasCards False ]
         }
     ,   { name = "Ride the Bus"
-        , attributes = [ HasPongTable False, HasCards True ]
+        , attributes = [ HasPongTable False, HasCards True, PayAttention False ]
         }
     ,   { name = "Fuck the Dealer"
-        , attributes = [ HasPongTable False, HasCards True ]
+        , attributes = [ HasPongTable False, HasCards True, PayAttention False ]
         }
     ,   { name = "Quarters"
-        , attributes = [ HasPongTable False, HasCoin True ]
+        , attributes = [ HasPongTable False, HasCoin True, HasCards False, HasCardBoardBox False ]
         }
     ,   { name = "Cheers, Governor"
-        , attributes = [ HasPongTable False ]
+        , attributes = [ HasPongTable False, HasCards False, HasCardBoardBox False, HasCoin False ]
         }
     ,   { name = "King's Cup (Kings)"
-        , attributes = [ HasPongTable False, HasCards True ]
+        , attributes = [ HasPongTable False, HasCards True, HasCardBoardBox False, HasCoin False, PayAttention True ]
         }
     ,   { name = "Box Game"
-        , attributes = [ HasPongTable False, HasCardBoardBox True ]
+        , attributes = [ HasPongTable False, HasCards False, HasCardBoardBox True, HasCoin False ]
         }
     ]
 
@@ -108,6 +108,18 @@ allQuestions =
     ,   { text = "Do you have a deck of cards?"
         , answers = [ ("Yes", HasCards True), ("No", HasCards False) ]
         , dependencies = [ HasPongTable False ]
+        }
+    ,   { text = "Do you have a cardboard box?"
+        , answers = [ ("Yes", HasCardBoardBox True), ("No", HasCardBoardBox False) ]
+        , dependencies = [ HasPongTable False, HasCards False ]
+        }
+    ,   { text = "Do you have a coin?"
+        , answers = [ ("Yes", HasCoin True), ("No", HasCoin False) ]
+        , dependencies = [ HasPongTable False, HasCards False ]
+        }
+    ,   { text = "Are most of your friends willing and able to pay attention to the game or are there going to be a lot of side conversations going on?"
+        , answers = [ ("We will give this game our undivided attention", PayAttention True), ("It's chaos out here", PayAttention False) ]
+        ,  dependencies = [ HasPongTable False, HasCards True ]
         }
     ]
 
@@ -148,7 +160,8 @@ view model =
                 ]
             ] ++
             (List.map (viewQuestion model) model.questions) ++
-            [ case model.gameOptions of
+            [ paragraph [] [ text (String.fromInt (List.length model.gameOptions) ++ " result(s)") ]
+            , case model.gameOptions of
                 [] ->
                     paragraph [] [ text "No games for you. Try different answers or play my favorite game: chug, chug, chug!" ]
                 _ ->
