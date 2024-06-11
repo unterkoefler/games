@@ -9,7 +9,11 @@
       in
       {
         devShells.default = pkgs.mkShell {
-          packages = [ pkgs.elmPackages.elm ];
+          packages = [
+            pkgs.elmPackages.elm
+            pkgs.just
+            pkgs.simple-http-server
+          ];
         };
       });
 }
